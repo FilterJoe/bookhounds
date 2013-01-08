@@ -1,0 +1,47 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+{% block object-tools %}
+    {% if change %} {% if not is_popup %}
+        <ul class="object-tools">
+            {% for button in buttons %}
+                <li><a href="{{ button.func_name }}/">{{ button.short_description }}</a></li>
+            {% endfor %}
+            <li><a href="history/" class="historylink">History</a></li>
+            {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">View on site</a></li>{% endif%}
+        </ul>
+    {% endif %} {% endif %}
+{% endblock %}
+
+{% block field_sets %}
+    <div id="changeformsidebar">
+        <img src="{{ book_img_url }}" height="auto" width="220">
+        <br>
+        <br>
+        <p><em>{{ book_title }}</em>
+            {% if lists_this_book_is_on %} is in the following lists:</p>
+                <ul>
+                    {% for BookList in lists_this_book_is_on %}
+                        <li><a href="/admin/lists/booklist/{{ BookList.id }}">{{ BookList.title }}</a>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                is not yet in any lists.</p>
+            {% endif %}
+    </div>
+    {{ block.super }}
+{% endblock %}
+
+{%  comment %}
+
+at first I tried:
+{% block after_related_objects %}
+but that was a clunky place to put it. Then I realized I could put it in with the field sets and just
+float it to the right, which is what I did above. MUCH nicer.
+
+and here's an example of a useless button I can stick just before the history button
+
+      <li><a href="dud/" class = "popamazonlink">dud</a></li>
+
+
+
+{%  endcomment %}

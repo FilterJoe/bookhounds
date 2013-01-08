@@ -1,0 +1,53 @@
+{% extends "mybase.html" %}
+
+{% block title %}Amazon URL request{% endblock %}
+
+{% block content %}
+  <div class="four columns centered">
+    <div id="featured">
+      {% for b in Books %}
+        <div class="slider-book">
+          <img src="{{ b.image_URL }}">
+          <p><a href="/admin/books/book/{{ b.id }}">{{ b.title }}</a></p>
+        </div>
+      {% endfor %}
+{#      <img src="http://pantingportraits.com/sites/default/files/imagecache/preview/prints/Afghanhound.jpg">#}
+{#    #}
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+  $(window).load(function() {
+    $('#featured').orbit({
+      animation: 'horizontal-slide',                  // fade, horizontal-slide, vertical-slide, horizontal-push
+      animationSpeed: 1200,                // how fast animtions are
+      timer: true,                        // true or false to have the timer
+      resetTimerOnClick: false,           // true resets the timer instead of pausing slideshow progress
+      advanceSpeed: 5000,                 // if timer is enabled, time between transitions
+      pauseOnHover: false,                // if you hover pauses the slider
+      startClockOnMouseOut: false,        // if clock should start on MouseOut
+      startClockOnMouseOutAfter: 1000,    // how long after MouseOut should the timer start again
+      directionalNav: true,               // manual advancing directional navs
+      captions: true,                     // do you want captions?
+      captionAnimation: 'fade',           // fade, slideOpen, none
+      captionAnimationSpeed: 800,         // if so how quickly should they animate in
+      bullets: false,                     // true or false to activate the bullet navigation
+      bulletThumbs: false,                // thumbnails for the bullets
+      bulletThumbLocation: '',            // location from this file where thumbs will be
+      fluid: true                         // or set a aspect ratio for content slides (ex: '4x3')
+    });
+
+  });
+</script>
+{% endblock %}
+
+{#Notes about the slider feature: #}
+{#bullets nav features cute but places the bullets in weird places (i.e. shrink window) #}
+{#css required if the images are not identically sized#}
+
+
+
+

@@ -1,0 +1,11 @@
+{% extends "mybase.html" %}
+
+{% block content %}
+    <h2>{{ publisher_entry }}</h2>
+    <ul>
+        {% for book in publisher_entry.books.all %}
+            <li>{{ book }}</li>
+        {% endfor %}
+    </ul>
+
+{%  endblock %}

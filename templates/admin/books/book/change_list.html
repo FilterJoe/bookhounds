@@ -1,0 +1,36 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_static admin_list %}
+{% load url from future %}
+{% load admin_urls %}
+
+{% block object-tools %}
+    {% if has_add_permission %}
+        <ul class="object-tools">
+            {% block object-tools-items %}
+                {% for button in buttons %}
+                    <li><a href="{{ button.func_name }}/">{{ button.short_description }}</a></li>
+                {% endfor %}
+                <li>
+                    <a href="{% url cl.opts|admin_urlname:'add' %}{% if is_popup %}?_popup=1{% endif %}" class="addlink">
+                        {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
+                    </a>
+                </li>
+            {% endblock %}
+        </ul>
+    {% endif %}
+{% endblock %}
+
+{% comment %}
+{% block object-tools %}
+  {% if change %} {% if not is_popup %}
+    <ul class="object-tools">
+      {% for button in buttons %}
+        <li><a href="{{ button.func_name }}/">{{ button.short_description }}</a></li>
+      {% endfor %}
+      <li><a href="history/" class="historylink">History</a></li>
+      {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">View on site</a></li>{% endif%}
+    </ul>
+  {% endif %} {% endif %}
+{% endblock %}
+
+{% endcomment %}

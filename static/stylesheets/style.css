@@ -1,0 +1,198 @@
+/* Zurb Foundation 3 is main CSS. This style.css file exists to override Zurb
+   defaults. The only changes I make to Zurb are in style.scss or in settings.scss.
+*/
+/* line 14, ../sass/style.scss */
+h3 {
+  font-size: 18px;
+}
+
+/* line 18, ../sass/style.scss */
+.centered-text {
+  text-align: center;
+}
+
+/* line 21, ../sass/style.scss */
+.main-home-page-panel {
+  text-align: center;
+}
+
+/* line 25, ../sass/style.scss */
+.side-panel {
+  text-align: center;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+/* line 31, ../sass/style.scss */
+.footer {
+  border-top: #e0f0c0 solid 1px;
+  line-height: 150%;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+/* ******************************************************************************* */
+/* custom styling for banner, top-bar (including nav), branding areas */
+/* line 40, ../sass/style.scss */
+.banner {
+  background-image: url("http://www.goodreads.com/assets/home/masthead_background.jpg");
+  height: 250px;
+  background-position: bottom;
+  /*border-left: 1px solid #e0f0c0;*/
+  /*border-right: 1px solid #e0f0c0;*/
+}
+
+/* line 48, ../sass/style.scss */
+.top-bar {
+  border-bottom: #e0f0c0 solid 1px;
+  font-family: "Times,serif";
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* branding area at top that also contains sitname and tagline */
+/* line 58, ../sass/style.scss */
+.branding {
+  margin-top: -96px;
+  text-align: center;
+}
+
+@media only screen and (max-width: 767px) {
+  /* line 63, ../sass/style.scss */
+  .branding {
+    margin-top: 20px;
+    text-align: center;
+  }
+}
+/* line 69, ../sass/style.scss */
+.sitename a {
+  color: saddlebrown;
+  font-size: 32px;
+  display: block;
+  text-align: center;
+}
+
+/* line 76, ../sass/style.scss */
+.tagline {
+  font-size: 16px;
+  display: block;
+  text-align: center;
+  font-weight: normal;
+  padding-top: 5px;
+  font-family: Times,serif;
+}
+
+/* line 85, ../sass/style.scss */
+img.navlogo {
+  height: 140px;
+}
+
+/* ******************************************************************************* */
+/* Styles to create pretty book lists on home page */
+/* line 91, ../sass/style.scss */
+#booklist ul li {
+  list-style: none;
+  display: inline;
+}
+
+/* line 95, ../sass/style.scss */
+#booklist ul a:hover {
+  text-decoration: none;
+}
+
+/* line 101, ../sass/style.scss */
+img.vCenteredImage {
+  padding: 40px;
+}
+
+/* line 105, ../sass/style.scss */
+ul.unstyledlist {
+  list-style: none;
+  line-height: 360%;
+  text-align: center;
+  font-family: "Century Gothic","Avant Garde",Helvetica,sans-serif;
+  color: #8b4513;
+  /* to color unlinked text */
+}
+
+/* line 113, ../sass/style.scss */
+ul.unstyledlist a {
+  text-decoration: none;
+  color: green;
+}
+
+/* line 117, ../sass/style.scss */
+li.unstyledlist a {
+  text-decoration: none;
+}
+
+/* line 120, ../sass/style.scss */
+ul.unstyledlist a:hover {
+  text-decoration: underline;
+  color: green;
+}
+
+/* Styles to create a graceful Orbit Loading Slate (see http://foundation.zurb.com/docs/orbit.php) */
+/* ********************************************************************************** */
+/* line 128, ../sass/style.scss */
+.slider-book {
+  display: block;
+  background: white;
+  text-align: center;
+}
+
+/* line 134, ../sass/style.scss */
+#featured, div.orbit-wrapper {
+  margin-top: 50px;
+}
+
+/* Django admin css overrides
+ ************************** */
+/* line 166, ../sass/style.scss */
+#header {
+  background-color: #769f26;
+}
+
+/* line 170, ../sass/style.scss */
+.module h2, .module caption, .inline-group h2 {
+  background-color: #e0f0c0;
+}
+
+/* line 174, ../sass/style.scss */
+.banner ul li {
+  list-style-type: none;
+}
+
+/* line 178, ../sass/style.scss */
+#changeformsidebar {
+  float: right;
+  padding: 10px;
+  border: 1px solid lightgrey;
+  border-left: none;
+  max-width: 220px;
+  height: 581px;
+}
+
+/* line 187, ../sass/style.scss */
+#changeformsidebar ul {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* line 191, ../sass/style.scss */
+#changeformsidebar li {
+  list-style: none;
+  margin-top: 0.5em;
+  font-size: 120%;
+  line-height: 120%;
+}
+
+/* line 199, ../sass/style.scss */
+#changeformsidebar a {
+  color: green;
+}
+
+/* line 202, ../sass/style.scss */
+#changeformsidebar a:hover {
+  text-decoration: underline;
+}

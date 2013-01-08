@@ -1,0 +1,27 @@
+{% extends "mybase.html" %}
+
+{% block title %}Amazon URL request{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="six columns centered centered-text">
+            <br>
+
+            <h2>Add a Book the Easy Way</h2>
+
+            <h3>Enter URL for an Amazon book page</h3>
+            {#      <ol>#}
+            {#        <li>Enter URL for an Amazon book page below.</li>#}
+            {#        <li>Hit enter. Wait a few seconds for data to be fetched.</li>#}
+            {#        <li>You will see the fetched book data.</li>#}
+            {#        <li>Check to make sure the data looks good.</li>#}
+            {#        <li>Make corrections if needed, then SAVE.</li>#}
+            {#        <br>#}
+            {#      </ol>#}
+            <form action="/admin/books/book/add/?url=" method="get" class="centered">
+                <input type="text" name="amzn_url" size="120">
+                <input type="submit" value="Enter Amazon Book URL" class="success button">
+            </form>
+        </div>
+    </div>
+{% endblock %}
