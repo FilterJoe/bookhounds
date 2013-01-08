@@ -42,11 +42,12 @@ def validated_amazon_URL_or_nil(u):
         print "invalid url due to not having embedded 10 digits"
         return '',\
                "\nis a valid Amazon URL but the page isn't in the usual format for a book. \
-    Unable to prefill data fields. You will have to do it manually."
+                    Unable to prefill data fields. You will have to do it manually."
     else:
-        print "Start index:", embedded_book_id.start()
-        print "End index:", embedded_book_id.end()
-        print u1
+#        print "Start index:", embedded_book_id.start()
+#        print "End index:", embedded_book_id.end()
+#        print u1
+        pass
     u2 = u1[:embedded_book_id.end()+1]
     return u2,''
 def get_tree(u):
@@ -112,6 +113,10 @@ def prepopulate_with_amazon_data(g,t,u):
     book_img = line4.split('_')[0] + 'jpg' # the unncessary junk between the '_' and .jpg is discarded
     amzn_data = (line1 + '\n' + line2 + '\n' + line3 + '\n' + book_img + '\n')
     section = line3.split(':')
+    print section
+    if section[0] == 'Amazon.com':
+        section.pop(0)
+    print section
     provisional_author_list = section[1].split(',')
     thing_after_author_list = section[2].split(',')
     pubsection = line1.split(':')
