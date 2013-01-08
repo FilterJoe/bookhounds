@@ -36,8 +36,8 @@ h3 {
 /* line 40, ../sass/style.scss */
 .banner {
   background-image: url("http://www.goodreads.com/assets/home/masthead_background.jpg");
-  height: 250px;
-  background-position: bottom;
+  height: 141px;
+  background-position: center center;
   /*border-left: 1px solid #e0f0c0;*/
   /*border-right: 1px solid #e0f0c0;*/
 }
@@ -67,7 +67,7 @@ h3 {
 /* line 69, ../sass/style.scss */
 .sitename a {
   color: saddlebrown;
-  font-size: 32px;
+  font-size: 28px;
   display: block;
   text-align: center;
 }
@@ -78,7 +78,7 @@ h3 {
   display: block;
   text-align: center;
   font-weight: normal;
-  padding-top: 5px;
+  padding-top: 2px;
   font-family: Times,serif;
 }
 

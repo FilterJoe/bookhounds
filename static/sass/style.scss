@@ -39,8 +39,8 @@ h3 {
 
 .banner {
   background-image: url("http://www.goodreads.com/assets/home/masthead_background.jpg");
-  height: 250px;
-  background-position: bottom;
+  height: 141px;
+  background-position: center center;
   /*border-left: 1px solid #e0f0c0;*/
   /*border-right: 1px solid #e0f0c0;*/
 }
@@ -68,7 +68,7 @@ h3 {
 
 .sitename a {
   color:$BrandTextColor;
-  font-size:$topBarTitleSize*1.6;
+  font-size:$topBarTitleSize*1.4;
   display:block;
   text-align:center;
 }
@@ -78,7 +78,7 @@ h3 {
   display:block;
   text-align:center;
   font-weight:normal;
-  padding-top:5px;
+  padding-top:2px;
   font-family:Times,serif;
 }
 
