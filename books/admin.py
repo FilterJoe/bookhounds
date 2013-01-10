@@ -76,11 +76,22 @@ class BookAdmin(ButtonAdmin):
         '''
         amazon_book_url = request.GET.get('amzn_url','')
         g = request.GET.copy()
+        message = ''
         u,message = scrape_amazon_utils.validated_amazon_URL_or_nil(amazon_book_url)
         if u:
             t = scrape_amazon_utils.get_tree(u) # uses lxml to parse u into a tree structure
-            request.GET = scrape_amazon_utils.prepopulate_with_amazon_data(g,t,u)
-        else:
+            if t:
+                newget,parse_message = scrape_amazon_utils.prepopulate_with_amazon_data(g,t,u)
+                if newget:
+                    print "newget is: ", newget
+                    request.GET = newget
+                else:
+                    message = parse_message
+                    print "newget is nil"
+            else:
+                message = '\nis a valid but unusual Amazon URL. Unable to prefill ' \
+                          'data field. You will have to do it manually.'
+        if message:
             request.GET = scrape_amazon_utils.prepopulate_with_error_message(g,amazon_book_url,message)
         return super(BookAdmin, self).add_view(request, form_url, extra_context=extra_context)
 

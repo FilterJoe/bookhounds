@@ -40,9 +40,7 @@ def validated_amazon_URL_or_nil(u):
     embedded_book_id = re.search('[0-9,X]{10}', u1)
     if not embedded_book_id:
         print "invalid url due to not having embedded 10 digits"
-        return '',\
-               "\nis a valid Amazon URL but the page isn't in the usual format for a book. \
-                    Unable to prefill data fields. You will have to do it manually."
+        return '',"\nseems like a valid Amazon URL but there's something not quite right about it. Unable to prefill data fields. You will have to do it manually."
     else:
 #        print "Start index:", embedded_book_id.start()
 #        print "End index:", embedded_book_id.end()
@@ -53,7 +51,7 @@ def validated_amazon_URL_or_nil(u):
 def get_tree(u):
     '''
     input: u is a url such as 'http://www.xyz.com'
-    output: lxml tree of the ElementTree class (NOT Element)
+    output: lxml tree of the ElementTree class (NOT Element) or nil if there's a fatal error
     requirements:
         import urllib2
         import StringIO
@@ -61,10 +59,14 @@ def get_tree(u):
     if you don't like this messy function, then get the requests package. See:
     https://gist.github.com/973705 and http://docs.python-requests.org/en/latest/
     '''
-    handler = urllib2.urlopen(urllib2.Request(u))
-    broken_html = handler.read()
-    parser = etree.HTMLParser()
-    tree = etree.parse(StringIO.StringIO(broken_html),parser)
+    tree = ''
+    try:
+        handler = urllib2.urlopen(urllib2.Request(u))
+        broken_html = handler.read()
+        parser = etree.HTMLParser()
+        tree = etree.parse(StringIO.StringIO(broken_html),parser)
+    except ValueError:
+        print "ERROR: unknown url type: %s" % u
     return tree
 
 def get_amazon_book_data_string (tree,tag,attribute):
@@ -106,72 +108,76 @@ def prepopulate_with_amazon_data(g,t,u):
     not see what the new publishers and authors look like. My goal was to make this incredibly easy
     to enter books.
     '''
-    line1 = get_amazon_book_data_string(t, 'li', 'Publisher')
-    line2 = get_amazon_book_data_string(t, 'li', 'ISBN-13')
-    line3 = get_amazon_book_data_string(t, 'meta[@content][@name="title"]', 'title')
-    line4 = get_amazon_book_data_string(t, 'img[@id="prodImage"]','prodImage')
-    book_img = line4.split('_')[0] + 'jpg' # the unncessary junk between the '_' and .jpg is discarded
-    amzn_data = (line1 + '\n' + line2 + '\n' + line3 + '\n' + book_img + '\n')
-    section = line3.split(':')
-    print section
-    if section[0] == 'Amazon.com':
-        section.pop(0)
-    print section
-    provisional_author_list = section[1].split(',')
-    thing_after_author_list = section[2].split(',')
-    pubsection = line1.split(':')
-    almost_publishdate = (pubsection[1].split('('))[-1]
-    publishdate= almost_publishdate.split(')')[0] # sometimes junk after ')' needs discarding
-    temppublishername = pubsection[1].split('(')[0]
-    if ';' in temppublishername:
-        publishername = temppublishername.split(';')[0]
-    else:
-        publishername = temppublishername[:-1]
-    p = books.models.Publisher.objects.filter(name=publishername[1:])
-    if not p: # if publisher not in database, then add it
-        new_pub = books.models.Publisher(name=publishername[1:])
-        new_pub.save()
-        # ':' is the delimiter between title and author, so below is my way of handling when ':' is
-    # actually part of the title. I know the ISBN comes after author list, so I assign the thing right
-    # before ISBN to author list, and all before goes to the title.
-    if (thing_after_author_list[0])[1:].isdigit():
-        author_list = provisional_author_list
-        title = section[0]
-    else:
-        author_list = thing_after_author_list
-        title = section[0] + ':' + provisional_author_list[0]
-    author_ids = ''
-    for i, val in enumerate(author_list):
-        authorstring = author_list[i].split(' ')
-        firstname = authorstring[1]
-        lastname = authorstring[-1]
-        middlename =''
-        if len(authorstring)==4: # in the even there are more than 3 names, pick 2nd to last of them
-            middlename = authorstring[-2]
-        if len(middlename) == 1: # if no period after middle initial, want to put one there to avoid duplicate authors
-            middlename += '.'
-        a = books.models.Author.objects.filter(first_name = firstname,middle_name=middlename,last_name=lastname)
-        if not a: # if author not in database, then add it
-            new_author = books.models.Author(first_name=firstname,middle_name=middlename,last_name=lastname)
-            new_author.save()
+    message = ''
+    try:
+        line1 = get_amazon_book_data_string(t, 'li', 'Publisher')
+        line2 = get_amazon_book_data_string(t, 'li', 'ISBN-13')
+        line3 = get_amazon_book_data_string(t, 'meta[@content][@name="title"]', 'title')
+        line4 = get_amazon_book_data_string(t, 'img[@id="prodImage"]','prodImage')
+        book_img = line4.split('_')[0] + 'jpg' # the unncessary junk between the '_' and .jpg is discarded
+        amzn_data = (line1 + '\n' + line2 + '\n' + line3 + '\n' + book_img + '\n')
+        section = line3.split(':')
+        print section
+        if section[0] == 'Amazon.com':
+            section.pop(0)
+        print section
+        provisional_author_list = section[1].split(',')
+        thing_after_author_list = section[2].split(',')
+        pubsection = line1.split(':')
+        almost_publishdate = (pubsection[1].split('('))[-1]
+        publishdate= almost_publishdate.split(')')[0] # sometimes junk after ')' needs discarding
+        temppublishername = pubsection[1].split('(')[0]
+        if ';' in temppublishername:
+            publishername = temppublishername.split(';')[0]
+        else:
+            publishername = temppublishername[:-1]
+        p = books.models.Publisher.objects.filter(name=publishername[1:])
+        if not p: # if publisher not in database, then add it
+            new_pub = books.models.Publisher(name=publishername[1:])
+            new_pub.save()
+            # ':' is the delimiter between title and author, so below is my way of handling when ':' is
+        # actually part of the title. I know the ISBN comes after author list, so I assign the thing right
+        # before ISBN to author list, and all before goes to the title.
+        if (thing_after_author_list[0])[1:].isdigit():
+            author_list = provisional_author_list
+            title = section[0]
+        else:
+            author_list = thing_after_author_list
+            title = section[0] + ':' + provisional_author_list[0]
+        author_ids = ''
+        for i, val in enumerate(author_list):
+            authorstring = author_list[i].split(' ')
+            firstname = authorstring[1]
+            lastname = authorstring[-1]
+            middlename =''
+            if len(authorstring)==4: # in the even there are more than 3 names, pick 2nd to last of them
+                middlename = authorstring[-2]
+            if len(middlename) == 1: # if no period after middle initial, want to put one there to avoid duplicate authors
+                middlename += '.'
+            a = books.models.Author.objects.filter(first_name = firstname,middle_name=middlename,last_name=lastname)
+            if not a: # if author not in database, then add it
+                new_author = books.models.Author(first_name=firstname,middle_name=middlename,last_name=lastname)
+                new_author.save()
 
-        auth = books.models.Author.objects.get(first_name = firstname,last_name=lastname)
-        author_ids += str(auth.id) + ',' # contrib\admin\options.py to see why this was needed
+            auth = books.models.Author.objects.get(first_name = firstname,last_name=lastname)
+            author_ids += str(auth.id) + ',' # contrib\admin\options.py to see why this was needed
 
-    g.update({
-        'title': title,
-        'ISBN13': (line2.split(':')[1])[1:15], # note that ISBN is different for each edition of the book. ISBN a list?
-        'Amazon_book_link': u,
-        'image_URL': book_img,
-        'Amazon_book_data': amzn_data,
-        'publication_date': strftime('%Y-%m-%d', strptime(publishdate, '%B %d, %Y')),
-        'publisher': books.models.Publisher.objects.get(name=publishername[1:]),
-        'authors': author_ids,
-        })
-
-    #    g.update({
-    #
-    #        })
-    return g
+        g.update({
+            'title': title,
+            'ISBN13': (line2.split(':')[1])[1:15], # note that ISBN is different for each edition of the book. ISBN a list?
+            'Amazon_book_link': u,
+            'image_URL': book_img,
+            'Amazon_book_data': amzn_data,
+            'publication_date': strftime('%Y-%m-%d', strptime(publishdate, '%B %d, %Y')),
+            'publisher': books.models.Publisher.objects.get(name=publishername[1:]),
+            'authors': author_ids,
+            })
+        return g, message
+    except: # TO DO: must fix this catch all error clause to get more specific
+        print "parsing choked in pre_populate_with_amazon_data"
+        message = '\nis a valid Amazon URL but something about the page format was unusual.' \
+                'Unable to parse the page and prefill the '\
+                'data field. You will have to do it manually.'
+        return '', message
 
 
