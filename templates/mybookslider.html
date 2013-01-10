@@ -3,11 +3,14 @@
 {% block title %}Amazon URL request{% endblock %}
 
 {% block content %}
-  <div class="four columns centered">
+  <div class="two columns centered">
     <div id="featured">
       {% for b in Books %}
         <div class="slider-book">
           <img src="{{ b.image_URL }}">
+            <p></p>
+            <p></p>
+            <p></p>
           <p><a href="/admin/books/book/{{ b.id }}">{{ b.title }}</a></p>
         </div>
       {% endfor %}
@@ -23,7 +26,7 @@
   $(window).load(function() {
     $('#featured').orbit({
       animation: 'horizontal-slide',                  // fade, horizontal-slide, vertical-slide, horizontal-push
-      animationSpeed: 1200,                // how fast animtions are
+      animationSpeed: 1200,                // how fast animations are
       timer: true,                        // true or false to have the timer
       resetTimerOnClick: false,           // true resets the timer instead of pausing slideshow progress
       advanceSpeed: 5000,                 // if timer is enabled, time between transitions
