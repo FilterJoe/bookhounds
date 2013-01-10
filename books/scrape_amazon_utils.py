@@ -175,7 +175,7 @@ def prepopulate_with_amazon_data(g,t,u):
         return g, message
     except: # TO DO: must fix this catch all error clause to get more specific
         print "parsing choked in pre_populate_with_amazon_data"
-        message = '\nis a valid Amazon URL but something about the page format was unusual.' \
+        message = '\nis a valid Amazon URL but something about the page format was unusual. ' \
                 'Unable to parse the page and prefill the '\
                 'data field. You will have to do it manually.'
         return '', message
