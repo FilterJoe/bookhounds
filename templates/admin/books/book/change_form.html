@@ -21,7 +21,7 @@
             {% if lists_this_book_is_on %} is in the following lists:</p>
                 <ul>
                     {% for BookList in lists_this_book_is_on %}
-                        <li><a href="/admin/lists/booklist/{{ BookList.id }}">{{ BookList.title }}</a>
+                        <li><a href="/admin/books/booklist/{{ BookList.id }}">{{ BookList.title }}</a>
                     {% endfor %}
                 </ul>
             {% else %}
